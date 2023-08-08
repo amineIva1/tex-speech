@@ -3,6 +3,8 @@ import openai
 from elevenlabs import generate, play
 import soundfile as sf
 from elevenlabs import set_api_key
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 set_api_key("1ee0a06d7afb7079c9f7487f53449036")
 openai.api_key="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"
 messages = [{"role": "system", "content": "You are a helpful assistant."}]
@@ -44,9 +46,14 @@ def transcribe(audio):
     play(audio11)
     # sf.write(audio11,"r.wav",samplerate=44100)
     # audio_output_filepath = "r.wav"
-   
+
+    #sentiment analysis
+    Sentence=[str(transcript)]
+    analyser=SentimentIntensityAnalyzer()
+    sentiment=analyser.polarity_scores(Sentence)
+      
     # return audio_output_filepath
-    return chat_transcript
+    return sentiment
 
 demo = gr.Interface(fn=transcribe, inputs=gr.Audio(source="microphone",type="filepath"), outputs="text")
     
