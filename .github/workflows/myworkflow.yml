@@ -1,0 +1,21 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run script
+        run: |
+          # Add your script commands here
+          echo "Hello, World!"
+          echo "This is my script"
+          # Add any other commands or scripts you want to run
