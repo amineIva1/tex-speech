@@ -9,6 +9,14 @@ resource "azurerm_resource_group" "example" {
   location = "West US"
 }
 
+resource "azurerm_container_registry" "example" {
+  name                     = "example-acr"
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  sku                      = "Basic"
+  admin_enabled            = true
+}
+
 resource "azurerm_container_group" "example" {
   name                = "example-container-group"
   location            = azurerm_resource_group.example.location
@@ -16,7 +24,7 @@ resource "azurerm_container_group" "example" {
 
   container {
     name   = "example-container"
-    image  = "nginx:latest"
+    image  = "${azurerm_container_registry.example.login_server}/<image-name>:<tag>"
     cpu    = "1.0"
     memory = "1.5"
 
@@ -25,4 +33,8 @@ resource "azurerm_container_group" "example" {
       protocol = "TCP"
     }
   }
+
+  os_type = "Linux"
+
+  dns_name_label = "<aci-dns-name-label>"
 }
